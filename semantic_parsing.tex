@@ -1,12 +1,33 @@
-\begin{itemize}
-    \item Motivation - Predicate argument structure were developed in order to capture "meaning" of a sentence / proxy for information extraction, + brief discussion on the representation we experimented with.
-    \item Predicate-argument structure representation.
-    \item example.
-    \item query language (mention that it's similar to other query languages).
-    \item context representation.
-    \item Model used 
-    \item hyperparameters (tree depth,...)
-\end{itemize}
+%% \begin{itemize}
+%%     \item Motivation - Predicate argument structure were developed in order to capture "meaning" of a sentence / proxy for information extraction, + brief discussion on the representation we experimented with.
+%%     \item Predicate-argument structure representation.
+%%     \item example.
+%%     \item query language (mention that it's similar to other query languages).
+%%     \item context representation.
+%%     \item Model used 
+%%     \item hyperparameters (tree depth,...)
+%% \end{itemize}
+
+Semantic parsing \cite{semantic-parsing}
+deals with translating a natural language utterance to
+an executable formal lanugage.
+This paradigm was shown to particularly lend itself to constrained question-answering
+over domain-specific datasets, such as geography (e.g., GeoQuery \cite{geoquery})
+@@, or more recently @@ \gabi{more examples}.
+
+In our setting, we will use sentence representation formalisms which were
+developed with the goal of capturing meaning in open-domain text, to match \drop's
+open-ended questions over from diverse domains,
+for which traditional semantic parsing formalisms may not be expressive enough.
+Specifically, we will experiment with three prominent formalisms, each
+representing different semantic granularity level:
+(1) syntactic dependencies \cite{sd}, which captures word-level relations, 
+(2) Open Information Extraction (Open IE; \cite{oie}), a shallow
+form of semantic representation, which links predicates
+with their arguments, abstracting away certain syntactic variations, and
+(3) Semantic Role Labeling (SRL; \cite{srl}), which can be seen as an
+augmentation of Open IE with predicate sense disambiguation and finer, predicate-specific
+argument roles.
 
 
 \begin{table}[]
