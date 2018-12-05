@@ -38,6 +38,7 @@
 \newcommand{\figref}[1]{Figure~\ref{fig:#1}}
 \newcommand{\secref}[1]{Section~\ref{sec:#1}}
 \newcommand{\tabref}[1]{Table~\ref{tab:#1}}
+\newcommand{\drop}[0]{DROP}
 
 
 \title{DROP: A Reading Comprehension Benchmark \\ Requiring
@@ -146,21 +147,28 @@ Mention algebra word problems in here somewhere
 
 \section{Baseline Systems}
 
-TODO
+In this section, we test the performance of several strong baselines on the
+\drop~ dataset.
+First, in \secref{heuristics},
+we try to identify and exploit annotation artifacts (following \cite{artifacts,max,bestpaperinemnlp})
+that are bound to exist in \drop, even after our adversarial crowdsourcing protocol.
+We then try two prominent approaches to QA on our dataset, evaluating
+the state-of-the-art in semantic parsing (\secref{semparse}) and reading comprehension (\secref{rc}) to the \drop~ dataset.
 
 \subsection{Heuristics and Adversarial Baselines}
-
-TODO: Gabi
-
-\subsection{SQuAD-style Reading Comprehension}
-\input{rc_baselines}
-
-
+\label{sec:heuristics}
+\input{heuristics}
 
 \subsection{Table Semantic Parser}
+\label{sec:semparse}
 \input{semantic_parsing}
 
+\subsection{SQuAD-style Reading Comprehension}
+\label{sec:rc}
+\input{rc_baselines}
+
 \section{Augmented QANet}
+\label{sec:model}
 \input{augmented_qanet}
 
 \section{Results and Discussion}
