@@ -1,14 +1,14 @@
 \begin{itemize}
-    \item type of reasoning needed with examples to showcase the difficulty of task \ref{tab:interesting_example}
     \item question type distribution ( superlatives, count, and arithmetic etc.) - heuristic based so lower-bounds
+    \item type of reasoning needed with examples to showcase the difficulty of task Table\ref{tab:interesting_example}
     \item distribution of answer types - span, number, digit
 \end{itemize}
 
 
 \begin{table*}[t]
 \centering
-\small
-\begin{tabular}{|p{1.5cm}|p{6.5cm}|p{3.5cm}|p{1.5cm}|p{1cm}|}
+\footnotesize
+\begin{tabular}{|p{1.5cm}|p{8cm}|p{3cm}|p{1.25cm}|p{1.25cm}|}
 \hline
 Reasoning & Passage & Question & Answer & BiDAF Answer\\
  \hline
@@ -18,8 +18,15 @@ Reasoning & Passage & Question & Answer & BiDAF Answer\\
  \hline
  Selection & In 1970, to commemorate the 100th anniversary of the founding of Baldwin City, {\color{purple}Baker University professor and playwright Don Mueller and Phyllis E. Braun, Business Manager, produced a musical play entitled The Ballad Of Black Jack} to tell the story of the events that led up to the battle. & Who was the University professor that helped produce The Ballad Of Black Jack, Ivan Boyd or Don Mueller? & Don Mueller & Baker\\
  \hline
+ Count and Sort & Denver would retake the lead with kicker {\color{brown}Matt Prater nailing a 43-yard field goal}, yet Carolina answered as kicker {\color{brown}John Kasay ties the game with a 39-yard field goal}. In the second quarter, Carolina took the lead with rookie RB Jonathan Stewart getting a 2-yard TD run. Carolina closed out the half with {\color{brown}Kasay nailing a 44-yard field goal}. In the third quarter, Carolina increased its lead with RB DeAngelo Williams's 56-yard TD run for the only score of the period. In the fourth quarter, Carolina sealed the win with {\color{brown}Kasay's 42-yard field goal}. & Which kicker kicked the most field goals? & John Kasay & Matt Prater\\
+ \hline
+ Set of spans & Charleston is a popular tourist destination, {\color{teal}with a considerable number of hotels, inns, and bed and breakfasts}, numerous restaurants featuring Lowcountry cuisine and shops. Charleston is also a notable art destination, named a top-25 arts destination by AmericanStyle magazine. & What type of accommodations are available in Charleston? &``hotels", ``inns", ``bed and breakfasts" & top-25 arts\\
+ \hline
  Complex Composition & James Douglas was the second {\color{olive}son of Sir George Douglas of Pittendreich, Master of Angus, and Elizabeth Douglas, daughter of David Douglas} of Pittendreich & Who was the grandfather of James Douglas? & David Douglas & Sir George Douglas\\
  \hline
+ Complex entity and coreference Resolution & {\color{violet}James Douglas} was the second son of Sir George Douglas of Pittendreich, Master of Angus, and Elizabeth Douglas, daughter David Douglas of Pittendreich. He wrote that he was over 61 years old in March 1578, so was probably born around 1516. Before {\color{violet}1543 he married Elizabeth}, daughter of James Douglas, 3rd Earl of Morton. {\color{violet}In 1553 James Douglas succeeded to the title and estates of his father-in-law}, including Dalkeith House in Midlothian, and Aberdour Castle in Fife. & How many years after he married Elizabeth did James Douglas succeed to the title and estates of his father-in-law? & 10 & 1553\\
+ \hline
+ 
 \end{tabular}
 \caption{Different reasoning required to answer questions in the dataset}
 \label{tab:interesting_example}
