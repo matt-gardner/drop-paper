@@ -29,6 +29,16 @@ with their arguments, abstracting away certain syntactic variations, and
 augmentation of Open IE with predicate sense disambiguation and finer, predicate-specific
 argument roles.
 
+Formally, we treat each of these three representations as a list of tuples, each
+consisting of a single predicate and an arbitrary number of arguments. Both
+predicate and arguments are spans from the raw sentence.
+
+Given these list of tuples, we convert each representation into tabular format.
+TODO-PRADEEP: Elaborate on conversion to table, and context augmentation.
+
+See \figref{semantic-parsing} for an example of the different predicate-argument
+representations over an input sentence.
+
 
 \begin{table}[]
 \begin{tabular}{@{}lllll@{}}
