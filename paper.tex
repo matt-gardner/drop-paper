@@ -86,9 +86,9 @@ The task of \emph{reading comprehension}, where systems must understand a single
 }\\
     
 \hrule
+
 \tiny{
-\underline{Passage}: Coming off their season-sweep over the Browns, the Steelers flew to The Meadowlands for a Week 11 intraconference duel with the New York Jets.  In the first quarter, Pittsburgh surprisingly fell behind early as Jets QB Kellen Clemens completed a {\color{olive}1-yard TD pass to TE Chris Baker}, along with kicker {\color{purple} Mike Nugent getting a 25-yard field goal}.  In the second quarter, the Steelers got on the board with QB Ben Roethlisberger completing a {\color{olive}7-yard TD pass to WR Santonio Holmes}.  New York would end the half with Nugent kicking a 19-yard field goal. In the third quarter, {\color{teal}Pittsburgh tied the game with kicker Jeff Reed getting a 37-yard and a 33-yard field goal}.  In the fourth quarter, the {\color{teal}Steelers took the lead with Reed getting a 48-yard field goal}.  However, the {\color{purple} Jets managed to tie the game with Nugent kicking a 28-yard field goal}.  In overtime, {\color{purple} New York managed to pull off the upset as Nugent nailed the game-winning 38-yard field goal}. Even worse, the Steelers highly ranked rushing defense allowed its first 100-yard rusher since 2005 (Edgerrin James of the Colts) as RB Thomas Jones got 30 carries for 117 yards.  
-    
+\underline{Passage}: Coming off their season-sweep over the Browns, the Steelers flew to The Meadowlands for a Week 11 intraconference duel with the New York Jets.  In the first quarter, Pittsburgh surprisingly fell behind early as Jets QB Kellen Clemens completed a {\color{olive}1-yard TD pass to TE Chris Baker}, along with kicker Mike Nugent getting a 25-yard field goal.  In the second quarter, the Steelers got on the board with QB Ben Roethlisberger completing a {\color{olive}7-yard TD pass to WR Santonio Holmes}.  New York would end the half with Nugent kicking a 19-yard field goal. In the third quarter, {\color{teal}Pittsburgh tied the game with kicker Jeff Reed getting a 37-yard and a 33-yard field goal}. \textit{\textbf{ In the fourth quarter, the {\color{teal}Steelers took the lead with Reed getting a 48-yard field goal}.  However, the Jets managed to tie the game with Nugent kicking a 28-yard field goal}}.  In overtime, New York managed to pull off the upset as Nugent nailed the game-winning 38-yard field goal. Even worse, the Steelers highly ranked rushing defense allowed its first 100-yard rusher since 2005 (Edgerrin James of the Colts) as RB Thomas Jones got 30 carries for 117 yards. \\
 {\color{teal}
     \underline{Question}: How many field goals did Pittsburgh Steelers make? \\
     Answer: 3 \\
@@ -99,11 +99,11 @@ The task of \emph{reading comprehension}, where systems must understand a single
     Answer: Santonio Holmes \\
     BiDAF Answer: Mike Nugent
 }\\
-{ \color{purple} 
-  \underline{Question}: How many yards was the longest made field goal by the Jets? \\
-    Answer: 38 \\
-    BiDAF Answer: 28-yard\\
-}
+{ \textit{\textbf{
+  \underline{Question}: In which quarter did both the teams make one field goal each? \\
+    Answer: fourth quarter \\
+    BiDAF Answer: third quarter, Pittsburgh tied the game with kicker Jeff Reed getting a 37-yard and a 33-yard field goal. In the fourth quarter
+}}}
 }
 
     \caption{Example passages, questions, and answers in DROP.}
