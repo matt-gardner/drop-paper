@@ -1,9 +1,19 @@
 \begin{itemize}
-    \item question type distribution ( superlatives, count, and arithmetic etc.) - heuristic based so lower-bounds
-    \item type of reasoning needed with examples to showcase the difficulty of task Table\ref{tab:interesting_example}
+    \item Question type distribution. We curate most frequently occurring top 200 bi-gram and tri-gram patterns and partition them into different categories based on domain knowledge. For example, the patterns with words ``longest", ``shortest"", and farthest etc. would require sorting.
+   This heuristic-based approximate question distribution is shown in \figref{answer_distrib}
+    \item types of reasoning needed to answer questions \tabref{interesting_example}
     \item distribution of answer types - span, number, digit
+    \item What's \emph{not} in the data: common sense inference, except for lexical relationships (e.g., grandfather $==$ mother's father).  Some questions require knowledge of scoring in sports; there are enough examples of these that the model at least has a chance of learning this from the data.
 \end{itemize}
 
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\textwidth]{images/answer_distrib}
+    \caption{Distribution of categories of questions}
+    \label{fig:answer_distrib}
+\end{figure}
+\gabi{Consider removing this figure 
+and putting numbers in Table 1}
 
 \begin{table*}[t]
 \centering
@@ -31,3 +41,5 @@ Reasoning & Passage & Question & Answer & BiDAF Answer\\
 \caption{Different reasoning required to answer questions in the dataset}
 \label{tab:interesting_example}
 \end{table*}
+
+\gabi{Make sure that it fits the paper, consider moving to the second page.}

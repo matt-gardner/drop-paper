@@ -68,7 +68,7 @@ Discrete Reasoning Over Paragraphs}
 The task of \emph{reading comprehension}, where systems must understand a single passage of text well enough to answer arbitrary questions about it, has seen significant progress in the last few years.  This progress has been so effective that the most popular datasets available for this task have been solved (CITE BERT on SQuAD, Danqi Chen on CNN/Daily Mail).  Many follow-on tasks are currently being proposed, throwing in additional complexities around tracking conversational state (CITE CoQA, QuAC), requiring passage retrieval (CITE TriviaQA, HotpotQA), mismatched passages and questions (CITE DuoRC, NarrativeQA, SQuAD 2.0), integrating knowledge from external sources (CITE openbookqa), or a particular kind of ``multi-step'' reasoning over multiple documents (CITE WikiHop, MultiRC).  While these additional complexities are worth studying, they deviate from the original goal of reading comprehension, which remains far from solved.
 
 \begin{figure}
-\tiny
+\small
 {\underline{Passage}: {\color{purple}In 2008, at another auction at Christies, Ulrich sold a 1982 Basquiat piece, Untitled (Boxer)}, for US \$13,522,500 to an anonymous telephone bidder. Another record price for a Basquiat painting was made {\color{olive}in 2007, when an untitled Basquiat work from 1981 sold at Sothebys in New York for US\$14.6 million}. {\color{olive}In 2012}, for the second year running, Basquiat was the most coveted contemporary (i.e. born after 1945) artist at auction, with {\color{olive}\euro 80 million in overall sales}. {\color{olive}That year}, his Untitled (1981), a painting of a haloed, black-headed man with a bright red skeletal body, depicted amid the artists signature scrawls, was  sold by \textbf{\textit{Robert Lehrman for {\color{olive}\$16.3 million}, well above its  \$12 million high estimate}}. A similar untitled piece, also undertaken in 1981 and formerly owned by the Israel Museum, {\color{purple}sold for \pounds312.92 million at Christies} London, setting a world auction record for Basquiats work. In 2013, Basquiats piece {\color{purple}Dustheads sold for \$48.8 million at Christies}. In 2016 an untitled piece sold at {\color{purple}Christies for \$57.3 million to a Japanese businessman} and collector, Yusaku Maezawa.
 \\
 {\color{olive} \underline{Question}: In which year was a Basquiat sold for a higher amount, 2007 or 2012?\\
@@ -86,43 +86,39 @@ The task of \emph{reading comprehension}, where systems must understand a single
 }}
 }\\
     
-\hrule
-
-\tiny{
-\underline{Passage}: Coming off their season-sweep over the Browns, the Steelers flew to The Meadowlands for a Week 11 intraconference duel with the New York Jets.  In the first quarter, Pittsburgh surprisingly fell behind early as Jets QB Kellen Clemens completed a {\color{olive}1-yard TD pass to TE Chris Baker}, along with kicker Mike Nugent getting a 25-yard field goal.  In the second quarter, the Steelers got on the board with QB Ben Roethlisberger completing a {\color{olive}7-yard TD pass to WR Santonio Holmes}.  New York would end the half with Nugent kicking a 19-yard field goal. In the third quarter, {\color{teal}Pittsburgh tied the game with kicker Jeff Reed getting a 37-yard and a 33-yard field goal}. \textit{\textbf{ In the fourth quarter, the {\color{teal}Steelers took the lead with Reed getting a 48-yard field goal}.  However, the Jets managed to tie the game with Nugent kicking a 28-yard field goal}}.  In overtime, New York managed to pull off the upset as Nugent nailed the game-winning 38-yard field goal. Even worse, the Steelers highly ranked rushing defense allowed its first 100-yard rusher since 2005 (Edgerrin James of the Colts) as RB Thomas Jones got 30 carries for 117 yards. \\
-{\color{teal}
-    \underline{Question}: How many field goals did Pittsburgh Steelers make? \\
-    Answer: 3 \\
-    BiDAF Answer: 33-yard
-}\\
-{ \color{olive} 
-  \underline{Question}: Who scored the longest touchdown of the game? \\
-    Answer: Santonio Holmes \\
-    BiDAF Answer: Mike Nugent
-}\\
-{ \textit{\textbf{
-  \underline{Question}: In which quarter did both the teams make one field goal each? \\
-    Answer: fourth quarter \\
-    BiDAF Answer: third quarter, Pittsburgh tied the game with kicker Jeff Reed getting a 37-yard and a 33-yard field goal. In the fourth quarter
-}}}
-}
+%\hrule
+%
+%\tiny{
+%\underline{Passage}: Coming off their season-sweep over the Browns, the Steelers flew to The Meadowlands for a Week 11 intraconference duel with the New York Jets.  In the first quarter, Pittsburgh surprisingly fell behind early as Jets QB Kellen Clemens completed a {\color{olive}1-yard TD pass to TE Chris Baker}, along with kicker Mike Nugent getting a 25-yard field goal.  In the second quarter, the Steelers got on the board with QB Ben Roethlisberger completing a {\color{olive}7-yard TD pass to WR Santonio Holmes}.  New York would end the half with Nugent kicking a 19-yard field goal. In the third quarter, {\color{teal}Pittsburgh tied the game with kicker Jeff Reed getting a 37-yard and a 33-yard field goal}. \textit{\textbf{ In the fourth quarter, the {\color{teal}Steelers took the lead with Reed getting a 48-yard field goal}.  However, the Jets managed to tie the game with Nugent kicking a 28-yard field goal}}.  In overtime, New York managed to pull off the upset as Nugent nailed the game-winning 38-yard field goal. Even worse, the Steelers highly ranked rushing defense allowed its first 100-yard rusher since 2005 (Edgerrin James of the Colts) as RB Thomas Jones got 30 carries for 117 yards. \\
+%{\color{teal}
+%    \underline{Question}: How many field goals did Pittsburgh Steelers make? \\
+%    Answer: 3 \\
+%    BiDAF Answer: 33-yard
+%}\\
+%{ \color{olive} 
+%  \underline{Question}: Who scored the longest touchdown of the game? \\
+%    Answer: Santonio Holmes \\
+%    BiDAF Answer: Mike Nugent
+%}\\
+%{ \textit{\textbf{
+%  \underline{Question}: In which quarter did both the teams make one field goal each? \\
+%    Answer: fourth quarter \\
+%    BiDAF Answer: third quarter, Pittsburgh tied the game with kicker Jeff Reed getting a 37-yard and a 33-yard field goal. In the fourth quarter
+%}}}
+%}
     \caption{Example passages, questions, and answers in DROP.}
     \label{fig:main_examples}
 \end{figure}
 
-We introduce a new, substantially more challenging reading comprehension dataset aimed at pushing the field towards more comprehensive analysis of paragraphs of text.  In this new benchmark, which we call DROP, a system is given a paragraph and a question and must perform some kind of {\bf D}iscrete {\bf R}easoning {\bf O}ver the content of the {\bf P}aragraph to obtain the correct answer.  These questions that require discrete reasoning (things like addition, sorting, or counting; see \figref{main_examples}) are inspired by the complex, compositional questions commonly found in the semantic parsing literature, and they force a system to understand the content of the paragraph well enough to reason over it, removing the simple lexical matching or entity typing shortcuts that were available in previous datasets.
-\sameer{would be good if we can ``list'' NLP tasks that would be involved? like coref, PAS, sem parsing of q, etc.}
+We introduce a new, substantially more challenging reading comprehension dataset aimed at pushing the field towards more comprehensive analysis of paragraphs of text.  In this new benchmark, which we call DROP, a system is given a paragraph and a question and must perform some kind of {\bf D}iscrete {\bf R}easoning {\bf O}ver the text in the {\bf P}aragraph to obtain the correct answer.  These questions that require discrete reasoning (things like addition, sorting, or counting; see \figref{main_examples}) are inspired by the complex, compositional questions commonly found in the semantic parsing literature, and they force a system to understand the content of the paragraph well enough to reason over it, removing the paraphrase and entity typing shortcuts that were available in previous datasets.
 
-In order to ensure that we have a meaningful evaluation metric (i.e., something other than BLEU or ROUGE), we restricted the answers in DROP to one of four types: (1) a span or set of spans from the passage, (2) a span from the question, (3) a number, or (4) a date.  With this restricted set of possible answers, we can reasonably use exact match and F1 as evaluation metrics, as in SQuAD.  (TODO(matt): probably too much detail for the intro, but I wanted to at least mention this somehow)\sameer{probably near end of next para?}
+We constructed this dataset through crowdsourcing, first collecting passages from Wikipedia that are easy to ask hard questions about, then encouraging crowd workers to produce challenging questions.  We additionally ran a baseline reading comprehension method (BiDAF; CITE) in the background as crowd workers were writing questions, requiring them to give questions that the baseline system could not correctly answer.  This resulted in a dataset of 54,000 questions from a variety of categories in Wikipedia, with a particular emphasis on sports game summaries and history passages.  The answers to the questions are required to be spans in the passage or question, numbers, or dates, which allows for easy and accurate evaluation metrics.
 
-We constructed this dataset through crowdsourcing, first collecting passages from Wikipedia that are easy to ask hard questions about, then encouraging crowd workers to produce challenging questions.  We did this through successive pilots that found and encouraged good question patterns, and by running a baseline reading comprehension method in the background as crowd workers were writing questions, making them give harder questions if the baseline system could get the answer correct.  This resulted in a dataset of 80,000 questions from a variety of categories in Wikipedia, with a particular emphasis on sports game summaries and history passages.
+We analyze the resulting dataset to show what phenomena are present, and what challenges a system must overcome to correctly answer the questions.  We find that many questions combine complex question semantics with SQuAD-style argument finding; e.g., in the last question in \figref{main_examples}, BiDAF correctly finds the amount the painting sold for, but does not understand the question semantics and cannot perform the numerical reasoning required to answer the question.  Other questions, such as the second question in \figref{main_examples}, require finding all events in the passage that match a description in the question, then aggregating them somehow (in this instance, by counting them).  Very often some kind of entity coreference is required.
 
-We used three different systems to judge baseline performance on DROP.
-\sameer{I wouldn't put a number of baselines here. We should talk about three \emph{types} of baselines: oracle/cheat based baselines, SQuAD-based ones, and Sem-Parsing based ones. each will likely have multiple variations}.
-The first is QANet (CITE), an architecture with performance near the top of the SQuAD leaderboard.  
-Our second system is an augmented version of QANet that adds a limited ability to do some kinds of discrete reasoning.  
-Our final system is a neural semantic parser built for WikiTableQuestions (CITE), where we first extract predicate-argument structures from the paragraph and put them into a table, then run the parser on the question and table.  
-The best-performing of these baselines, augmented QANet, achieves 23\% exact match, while expert humans achieve 90\%.
+We used three types of systems to judge baseline performance on DROP: (1) heuristic, adversarial baselines, to check for biases in the data; (2) SQuAD-style reading comprehension methods; and (3) semantic parsers.  Of these, the reading comprehension methods perform the best, with our best baseline achieving 28\% $F_1$ on our generalized accuracy metric, while expert human performance is 96.7\%.
+
+Finally, we contribute a new model for this task that combines simple numerical reasoning with standard reading comprehension methods, allowing the model to answer questions involving counting, addition and subtraction.  This model reaches 41\%, a 13\% absolute increase over the best baseline system.
 
 The dataset, easily-extendable code for the baseline systems, and a leaderboard with a hidden test set can be found at https://withheld.for.review/.
 
