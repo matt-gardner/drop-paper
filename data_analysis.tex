@@ -1,0 +1,26 @@
+\begin{itemize}
+    \item type of reasoning needed with examples to showcase the difficulty of task \ref{tab:interesting_example}
+    \item question type distribution ( superlatives, count, and arithmetic etc.) - heuristic based so lower-bounds
+    \item distribution of answer types - span, number, digit
+\end{itemize}
+
+
+\begin{table*}[t]
+\centering
+\small
+\begin{tabular}{|p{1.5cm}|p{6.5cm}|p{3.5cm}|p{1.5cm}|p{1.5cm}|}
+\hline
+Reasoning & Passage & Question & Answer & BiDAF Answer\\
+ \hline
+ Addition or Subtraction & Before the UNPROFOR fully deployed, the HV clashed with an armed force of the RSK in the village of Nos Kalik, located in a pink zone near \u Sibenik, and captured the village at 4:45p.m. on {\color{teal}2 March 1992}. The JNA formed a battlegroup to counterattack the {\color{teal}next day}. & What date did the JNA form a battlegroup to counterattack after the village of Nos Kalik was captured?  & 3 March 1992 & 2 March 1992 \\ 
+ \hline
+ Comparison & In {\color{orange}1517, the seventeen-year-old King sailed to Castile}, where he was formally recognised as King of Castile. There, his Flemish court provoked much scandal, as de Cro\"y shamelessly sold government privileges for personal money and installed other Flemish nobles into government offices. {\color{orange}In May 1518, Charles traveled to Barcelona in Aragon}, where he would remain for nearly two years. & Where did Charles travel to first, Castile or Barcelona? & Castile & Aragon\\
+ \hline
+ Selection & In 1970, to commemorate the 100th anniversary of the founding of Baldwin City, {\color{purple}Baker University professor and playwright Don Mueller and Phyllis E. Braun, Business Manager, produced a musical play entitled The Ballad Of Black Jack} to tell the story of the events that led up to the battle. & Who was the University professor that helped produce The Ballad Of Black Jack, Ivan Boyd or Don Mueller? & Don Mueller & Baker\\
+ \hline
+ Complex Composition & James Douglas was the second {\color{olive}son of Sir George Douglas of Pittendreich, Master of Angus, and Elizabeth Douglas, daughter of David Douglas} of Pittendreich & Who was the grandfather of James Douglas? & David Douglas & Sir George Douglas\\
+ \hline
+\end{tabular}
+\caption{Different reasoning required to answer questions in the dataset}
+\label{tab:interesting_example}
+\end{table*}
