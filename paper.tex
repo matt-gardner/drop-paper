@@ -20,7 +20,7 @@
 \usepackage{url}
 \usepackage{eurosym}
 \usepackage{todonotes}
-
+\usepackage{multirow}
 %\aclfinalcopy % Uncomment this line for the final submission
 %\def\aclpaperid{***} %  Enter the acl Paper ID here
 
@@ -33,6 +33,7 @@
 \newcommand{\gabi}[1]{\todo[color=green!40]{\textbf{Gabi:} #1}}
 \newcommand{\sameer}[1]{\todo[color=purple!40]{\textbf{sameer:} #1}}
 \newcommand{\dheeru}[1]{\todo[color=olive!40]{\textbf{dheeru:} #1}}
+\newcommand{\matt}[1]{\todo[color=teal!40]{\textbf{Matt:} #1}}
 \newcommand{\nascomment}[1]{\todo[color=blue!40]{\textbf{Noah:} #1}}
 
 \newcommand{\figref}[1]{Figure~\ref{fig:#1}}
@@ -60,99 +61,39 @@ Discrete Reasoning Over Paragraphs}
 \begin{document}
 \maketitle
 \begin{abstract}
-  Reading comprehension has recently seen rapid progress, with systems matching humans on the most popular datasets for the task.  However, a large body of work has highlighted the brittleness of these systems, showing that there is much work left to be done.  We introduce a new reading comprehension benchmark, DROP, which requires {\bf D}iscrete {\bf R}easoning {\bf O}ver the content of {\bf P}aragraphs.  In this crowdsourced, adversarially-created, 50k-question benchmark, a system must resolve references in a question, perhaps to multiple input positions, and perform discrete operations over them (such as addition, counting, or sorting).  These operations require a much more comprehensive understanding of the content of paragraphs, as they remove the paraphrase-and-entity-typing shortcuts available in prior datasets.  We apply state-of-the-art methods from both the reading comprehension and semantic parsing literatures on this dataset and show that the best systems only achieve 28\% $F_1$ on our generalized accuracy metric, while expert human performance is 96.3\%.  We additionally present a new model that combines reading comprehension methods with simple numerical reasoning to achieve 41\% $F_1$.
+
+  Reading comprehension has recently seen rapid progress, with systems matching humans on the most popular datasets for the task.  However, a large body of work has highlighted the brittleness of these systems, showing that there is much work left to be done.  We introduce a new English reading comprehension benchmark, DROP, which requires {\bf D}iscrete {\bf R}easoning {\bf O}ver the content of {\bf P}aragraphs.  In this crowdsourced, adversarially-created, 50k-question benchmark, a system must resolve references in a question, perhaps to multiple input positions, and perform discrete operations over them (such as addition, counting, or sorting).  These operations require a much more comprehensive understanding of the content of paragraphs than what was necessary for prior datasets.  We apply state-of-the-art methods from both the reading comprehension and semantic parsing literatures on this dataset and show that the best systems only achieve 28\% $F_1$ on our generalized accuracy metric, while expert human performance is 96.3\%.  We additionally present a new model that combines reading comprehension methods with simple numerical reasoning to achieve 41\% $F_1$.
 
 \end{abstract}
 
 \section{Introduction}
-The task of \emph{reading comprehension}, where systems must understand a single passage of text well enough to answer arbitrary questions about it, has seen significant progress in the last few years.  This progress has been so effective that the most popular datasets available for this task have been solved (CITE BERT on SQuAD, Danqi Chen on CNN/Daily Mail).  Many follow-on tasks are currently being proposed, throwing in additional complexities around tracking conversational state (CITE CoQA, QuAC), requiring passage retrieval (CITE TriviaQA, HotpotQA), mismatched passages and questions (CITE DuoRC, NarrativeQA, SQuAD 2.0), integrating knowledge from external sources (CITE openbookqa), or a particular kind of ``multi-step'' reasoning over multiple documents (CITE WikiHop, MultiRC).  While these additional complexities are worth studying, they deviate from the original goal of reading comprehension, which remains far from solved.
-
-\begin{figure}
-\small
-{\underline{Passage}: {\color{purple}In 2008, at another auction at Christies, Ulrich sold a 1982 Basquiat piece, Untitled (Boxer)}, for US \$13,522,500 to an anonymous telephone bidder. Another record price for a Basquiat painting was made {\color{olive}in 2007, when an untitled Basquiat work from 1981 sold at Sothebys in New York for US\$14.6 million}. {\color{olive}In 2012}, for the second year running, Basquiat was the most coveted contemporary (i.e. born after 1945) artist at auction, with {\color{olive}\euro 80 million in overall sales}. {\color{olive}That year}, his Untitled (1981), a painting of a haloed, black-headed man with a bright red skeletal body, depicted amid the artists signature scrawls, was  sold by \textbf{\textit{Robert Lehrman for {\color{olive}\$16.3 million}, well above its  \$12 million high estimate}}. A similar untitled piece, also undertaken in 1981 and formerly owned by the Israel Museum, {\color{purple}sold for \pounds312.92 million at Christies} London, setting a world auction record for Basquiats work. In 2013, Basquiats piece {\color{purple}Dustheads sold for \$48.8 million at Christies}. In 2016 an untitled piece sold at {\color{purple}Christies for \$57.3 million to a Japanese businessman} and collector, Yusaku Maezawa.
-\\
-{\color{olive} \underline{Question}: In which year was a Basquiat sold for a higher amount, 2007 or 2012?\\
-    Answer: 2012\\
-    BiDAF Answer. 1982
-} \\
-{\color{purple}
-    \underline{Question}. How many Basquiats were sold at Christies?\\
-    Answer. 4\\
-    BiDAF Answer. \$48.8 million
-}\\
-\textbf{\textit{ \underline{Question}: How many more dollars was the Untitled (1981) painting sold for than the 12 million dollar estimation?\\
-    Answer: 4300000\\
-    BiDAF Answer. \$16.3 million
-}}
-}\\
-    
-%\hrule
-%
-%\tiny{
-%\underline{Passage}: Coming off their season-sweep over the Browns, the Steelers flew to The Meadowlands for a Week 11 intraconference duel with the New York Jets.  In the first quarter, Pittsburgh surprisingly fell behind early as Jets QB Kellen Clemens completed a {\color{olive}1-yard TD pass to TE Chris Baker}, along with kicker Mike Nugent getting a 25-yard field goal.  In the second quarter, the Steelers got on the board with QB Ben Roethlisberger completing a {\color{olive}7-yard TD pass to WR Santonio Holmes}.  New York would end the half with Nugent kicking a 19-yard field goal. In the third quarter, {\color{teal}Pittsburgh tied the game with kicker Jeff Reed getting a 37-yard and a 33-yard field goal}. \textit{\textbf{ In the fourth quarter, the {\color{teal}Steelers took the lead with Reed getting a 48-yard field goal}.  However, the Jets managed to tie the game with Nugent kicking a 28-yard field goal}}.  In overtime, New York managed to pull off the upset as Nugent nailed the game-winning 38-yard field goal. Even worse, the Steelers highly ranked rushing defense allowed its first 100-yard rusher since 2005 (Edgerrin James of the Colts) as RB Thomas Jones got 30 carries for 117 yards. \\
-%{\color{teal}
-%    \underline{Question}: How many field goals did Pittsburgh Steelers make? \\
-%    Answer: 3 \\
-%    BiDAF Answer: 33-yard
-%}\\
-%{ \color{olive} 
-%  \underline{Question}: Who scored the longest touchdown of the game? \\
-%    Answer: Santonio Holmes \\
-%    BiDAF Answer: Mike Nugent
-%}\\
-%{ \textit{\textbf{
-%  \underline{Question}: In which quarter did both the teams make one field goal each? \\
-%    Answer: fourth quarter \\
-%    BiDAF Answer: third quarter, Pittsburgh tied the game with kicker Jeff Reed getting a 37-yard and a 33-yard field goal. In the fourth quarter
-%}}}
-%}
-    \caption{Example passages, questions, and answers in DROP.}
-    \label{fig:main_examples}
-\end{figure}
-
-We introduce a new, substantially more challenging reading comprehension dataset aimed at pushing the field towards more comprehensive analysis of paragraphs of text.  In this new benchmark, which we call DROP, a system is given a paragraph and a question and must perform some kind of {\bf D}iscrete {\bf R}easoning {\bf O}ver the text in the {\bf P}aragraph to obtain the correct answer.  These questions that require discrete reasoning (things like addition, sorting, or counting; see \figref{main_examples}) are inspired by the complex, compositional questions commonly found in the semantic parsing literature, and they force a system to understand the content of the paragraph well enough to reason over it, removing the paraphrase and entity typing shortcuts that were available in previous datasets.
-
-We constructed this dataset through crowdsourcing, first collecting passages from Wikipedia that are easy to ask hard questions about, then encouraging crowd workers to produce challenging questions.  We additionally ran a baseline reading comprehension method (BiDAF; CITE) in the background as crowd workers were writing questions, requiring them to give questions that the baseline system could not correctly answer.  This resulted in a dataset of 54,000 questions from a variety of categories in Wikipedia, with a particular emphasis on sports game summaries and history passages.  The answers to the questions are required to be spans in the passage or question, numbers, or dates, which allows for easy and accurate evaluation metrics.
-
-We analyze the resulting dataset to show what phenomena are present, and what challenges a system must overcome to correctly answer the questions.  We find that many questions combine complex question semantics with SQuAD-style argument finding; e.g., in the last question in \figref{main_examples}, BiDAF correctly finds the amount the painting sold for, but does not understand the question semantics and cannot perform the numerical reasoning required to answer the question.  Other questions, such as the second question in \figref{main_examples}, require finding all events in the passage that match a description in the question, then aggregating them somehow (in this instance, by counting them).  Very often some kind of entity coreference is required.
-
-We used three types of systems to judge baseline performance on DROP: (1) heuristic, adversarial baselines, to check for biases in the data; (2) SQuAD-style reading comprehension methods; and (3) semantic parsers.  Of these, the reading comprehension methods perform the best, with our best baseline achieving 28\% $F_1$ on our generalized accuracy metric, while expert human performance is 96.7\%.
-
-Finally, we contribute a new model for this task that combines simple numerical reasoning with standard reading comprehension methods, allowing the model to answer questions involving counting, addition and subtraction.  This model reaches 41\%, a 13\% absolute increase over the best baseline system.
-
-The dataset, easily-extendable code for the baseline systems, and a leaderboard with a hidden test set can be found at https://withheld.for.review/.
-
-
+\label{sec:intro}
+\input{intro.tex}
 
 \section{Related Work}
-\gabi{Maybe better at the end, to get to the dataset faster}
-TODO
-
-Mention algebra word problems in here somewhere
-
-\section{Reading Comprehension}
-
+\label{sec:related_work}
+\input{related_work.tex}
 
 \section{DROP Data Collection}
+\label{sec:data_collection}
 \input{data_collection}
 
 
 \section{DROP Data Analysis}
+\label{sec:data_analysis}
 \input{data_analysis}
 
 \section{Baseline Systems}
+\label{sec:baselines}
 
 In this section, we test the performance of several strong baselines on the
 \drop~ dataset.
-First, in \secref{heuristics},
-we try to identify and exploit annotation artifacts (following \cite{artifacts,max,bestpaperinemnlp})
-that are bound to exist in \drop, even after our adversarial crowdsourcing protocol.
-We then try two prominent approaches to QA on our dataset, evaluating
-the state-of-the-art in semantic parsing (\secref{semparse}) and reading comprehension (\secref{rc}) on the \drop~ dataset.
 
-\subsection{Heuristics and Adversarial Baselines}
-\label{sec:heuristics}
-\input{heuristics}
+First, we try two prominent approaches to the QA task on our dataset, evaluating
+the state-of-the-art in semantic parsing (\secref{semparse}) and reading comprehension (\secref{rc}) to the \drop~ dataset.
+Then, in \secref{heuristics},
+we try to identify and exploit annotation artifacts (following \cite{Gururangan:2018,Kaushik2018HowMR})
+that are bound to exist in \drop, even after our adversarial crowdsourcing protocol.
 
 \subsection{Semantic Parsing}
 \label{sec:semparse}
@@ -162,20 +103,75 @@ the state-of-the-art in semantic parsing (\secref{semparse}) and reading compreh
 \label{sec:rc}
 \input{rc_baselines}
 
+\subsection{Heuristics and Adversarial Baselines}
+\label{sec:heuristics}
+\input{heuristics}
+
+
 \section{Augmented QANet}
 \label{sec:model}
 \input{augmented_qanet}
 
-\section{Results and Discussion}
+\begin{table}
+    \small
+    \centering
+    \begin{tabular}{lcccc}
+    \toprule
+     \multirow{2}{*}{\bf Method}    & \multicolumn{2}{c}{\bf Dev} & \multicolumn{2}{c}{\bf Test} \\
+     \cmidrule(lr){2-3}
+     \cmidrule(lr){4-5}
+         & EM & F$_1$ & EM & F$_1$ \\
+    \midrule
+    %%%%%%%        Semantic Parsing     %%%%%%%%%%%%
+    \multicolumn{5}{l}{\bf Semantic Parsing}\\
+    Syn Dep     &   -   &   -   &   -   &   -   \\
+    OpenIE      &   -   &   -   &   -   &   -   \\
+    SRL         &   -   &   -   &   -   &   -   \\
+    \addlinespace
+         
+    %%%%%%%        SQuAD-style     %%%%%%%%%%%%
+    \multicolumn{5}{l}{\bf SQuAD style}\\
+    BiDAF       &   -   &   -   &   -   &   -   \\
+    QANet       &   -   &   -   &   -   &   -   \\
+    QANet+ELMo  &   -   &   -   &   -   &   -   \\
+    BERT        &   -   &   -   &   -   &   -   \\
+    \addlinespace
 
-TODO
+
+    %%%%%%%        Baselines     %%%%%%%%%%%%
+    \multicolumn{5}{l}{\bf Heuristics/Adversarial Baselines}\\
+    Majority   &   -   &   -   &   -   &   -   \\
+    Q-only     &   -   &   -   &   -   &   -   \\
+    P-only     &   -   &   -   &   -   &   -   \\
+    gabi1      &   -   &   -   &   -   &   -   \\
+    \addlinespace
+    
+    %%%%%%%        Baselines     %%%%%%%%%%%%
+    \multicolumn{5}{l}{\bf Augmented QANet}\\
+    + Q Span   &   -   &   -   &   -   &   -   \\
+    + Count     &   -   &   -   &   -   &   -   \\
+    + Add/Sub     &   -   &   -   &   -   &   -   \\
+    Complete Model      &   -   &   -   &   -   &   -   \\
+    \addlinespace
+
+    %%%%%%%        Human     %%%%%%%%%%%%
+    \bf Human Expert\footnotemark   &   -   &   -   &   -   &   -   \\
+    % \addlinespace
+    \bottomrule
+    \end{tabular}
+    \caption{LONG TABLE of results!}
+    \label{tab:my_label}
+\end{table}
+
+
+\section{Results and Discussion}
+\label{sec:results}
+\input{results}
 
 \section{Conclusion}
 
 TODO
 \gabi{Consider as appendix: sample of the dataset (maybe using the dashboard?), screenshot of the annotation interface}
-
-IGNORE, just for getting rid of build error\cite{Aho:72}
 
 
 %\section*{Acknowledgments}
@@ -187,4 +183,4 @@ IGNORE, just for getting rid of build error\cite{Aho:72}
 \bibliography{paper}
 \bibliographystyle{acl_natbib}
 
-\end{document}
+ \end{document}

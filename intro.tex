@@ -1,0 +1,41 @@
+The task of \emph{reading comprehension}, where systems must understand a single passage of text well enough to answer arbitrary questions about it, has seen significant progress in the last few years, so much that the most popular datasets available for this task have been solved~\citep{Chen2016ATE,Devlin2018BERTPO}.\dheeru{suggestion: replacing ``been solved" by ``surpassed human performance" because solved could mean 100\% EM accuracy}  We introduce a new, substantially more challenging English reading comprehension dataset aimed at pushing the field towards more comprehensive analysis of paragraphs of text.  In this new benchmark, which we call DROP, a system is given a paragraph and a question and must perform some kind of {\bf D}iscrete {\bf R}easoning {\bf O}ver the text in the {\bf P}aragraph to obtain the correct answer.
+
+These questions that require discrete reasoning (things like addition, sorting, or counting; see \tabref{main_examples}) are inspired by the complex, compositional questions commonly found in the semantic parsing literature.  We focus on this type of question because they force a structured analysis of the content of the paragraph that is detailed enough to permit reasoning.  Our goal is to further \emph{paragraph understanding}; complex questions allow us to test a system's understanding of the paragraph's semantics.
+
+DROP is also designed to further research on methods that combine neural \dheeru{how about ``linguistic" representations or something more generic} representations with symbolic, discrete reasoning.  In order to do well on this dataset, a system must be able to find multiple occurrences of an event described in a question, presumably using some kind of neural \dheeru{may be``soft" instead of ``neural"} matching, extract arguments from the events, then perform a numerical operation such as a sort, to answer a question like \textit{``Who threw the longest touchdown pass?''}
+
+We constructed this dataset through crowdsourcing, first collecting passages from Wikipedia that are easy to ask hard questions about, then encouraging crowd workers to produce challenging questions.  This encouragement was partially through instructions given to workers, and partially through the use of an \emph{adversarial baseline}: we ran a baseline reading comprehension method (BiDAF)~\citep{Seo2016BidirectionalAF} in the background as crowd workers were writing questions, requiring them to give questions that the baseline system could not correctly answer.  This resulted in a dataset of 54,000 questions from a variety of categories in Wikipedia, with a particular emphasis on sports game summaries and history passages.  The answers to the questions are required to be spans in the passage or question, numbers, or dates, which allows for easy and accurate evaluation metrics.
+
+\begin{table*}[!t]
+\centering
+\footnotesize
+\begin{tabular}{p{1.5cm}p{7cm}p{2.8cm}p{1.25cm}p{1.25cm}}
+\toprule
+{\bf Reasoning} & {\bf Passage} & {\bf Question} & {\bf Answer} & {\bf BiDAF}\\
+ \midrule
+ Addition or Subtraction (XX\%) & That year, his {\bf \color{teal} Untitled (1981)}, a painting of a haloed, black-headed man with a bright red skeletal body, depicted amid the artists signature scrawls, was {\bf \color{teal}{sold by Robert Lehrman for \$16.3 million, well above its  \$12 million high estimate}}.  & How many more dollars was the Untitled (1981) painting sold for than the 12 million dollar estimation? & 4300000 & \$16.3 million \\ 
+ \midrule
+ Comparison (XX\%) & In {\bf \color{orange}1517, the seventeen-year-old King sailed to Castile}, where he was formally recognised as King of Castile. There, his Flemish court \ldots. {\bf \color{orange}In May 1518, Charles traveled to Barcelona in Aragon}, where he would remain for nearly two years. & Where did Charles travel to first, Castile or Barcelona? & Castile & Aragon\\
+ \midrule
+ Selection (XX\%) & In 1970, to commemorate the 100th anniversary of the founding of Baldwin City, {\bf \color{purple}Baker University professor and playwright Don Mueller and Phyllis E. Braun, Business Manager, produced a musical play entitled The Ballad Of Black Jack} to tell the story of the events that led up to the battle. & Who was the University professor that helped produce The Ballad Of Black Jack, Ivan Boyd or Don Mueller? & Don Mueller & Baker\\
+ \midrule
+ Count (XX\%) and Sort (XX\%) & Denver would retake the lead with kicker {\bf \color{brown}Matt Prater nailing a 43-yard field goal}, yet Carolina answered as kicker {\bf \color{brown}John Kasay ties the game with a 39-yard field goal}. \ldots \ Carolina closed out the half with {\bf \color{brown}Kasay nailing a 44-yard field goal}. \ldots \ In the fourth quarter, Carolina sealed the win with {\bf \color{brown}Kasay's 42-yard field goal}. & Which kicker kicked the most field goals? & John Kasay & Matt Prater\\
+ \midrule
+ Set of spans (XX\%) & Charleston is a popular tourist destination, {\bf \color{blue}with a considerable number of hotels, inns, and bed and breakfasts}, numerous restaurants featuring Lowcountry cuisine and shops. Charleston is also a notable art destination, named a top-25 arts destination by AmericanStyle magazine. & What type of accommodations are available in Charleston? &``hotels", ``inns", ``bed and breakfasts" & top-25 arts\\
+ \midrule
+ Composition (XX\%) & James Douglas was the second {\bf \color{olive}son of Sir George Douglas of Pittendreich, and Elizabeth Douglas, daughter of David Douglas} of Pittendreich. & Who was the grandfather of James Douglas? & David Douglas & Sir George Douglas\\
+ \midrule
+ Coreference Resolution (XX\%) & \ {\bf \color{violet}James Douglas} was the second son of Sir George Douglas of Pittendreich, and Elizabeth Douglas, daughter David Douglas of Pittendreich. Before {\bf \color{violet}1543 he married Elizabeth}, daughter of James Douglas, 3rd Earl of Morton. {\bf \color{violet}In 1553 James Douglas succeeded to the title and estates of his father-in-law}, including Dalkeith House in Midlothian, and Aberdour Castle in Fife. & How many years after he married Elizabeth did James Douglas succeed to the title and estates of his father-in-law? & 10 & 1553\\
+ \bottomrule
+\end{tabular}
+\caption{Questions from DROP, showing the reasoning required, with relevant parts of the passage highlighted.}
+\label{tab:main_examples}
+\end{table*}
+
+We present an analysis of the resulting dataset to show what phenomena are present.  We find that many questions combine complex question semantics with SQuAD-style argument finding; e.g., in the first question in \tabref{main_examples}, BiDAF correctly finds the amount the painting sold for, but does not understand the question semantics and cannot perform the numerical reasoning required to answer the question.  Other questions, such as the fourth question in \tabref{main_examples}, require finding all events in the passage that match a description in the question, then aggregating them somehow (in this instance, by counting them and then performing an argmax).  Very often entity coreference is required.  \tabref{main_examples} gives a number of different phenomena, with their proportions in the dataset. \dheeru{add number of annotations etc. in the table caption}
+
+We used three types of systems to judge baseline performance on DROP: (1) heuristic, adversarial baselines, to check for biases in the data; (2) SQuAD-style reading comprehension methods; and (3) semantic parsers operating on a pipelined analysis of the passage.  The reading comprehension methods perform the best, with our best baseline achieving 28\% $F_1$ on our generalized accuracy metric, while expert human performance is 96.7\%.
+
+Finally, we contribute a new model for this task that combines limited numerical reasoning with standard reading comprehension methods, allowing the model to answer questions involving counting, addition and subtraction.  This model reaches 46\% $F_1$, an 18\% absolute increase over the best baseline system.
+
+The dataset, easily-extendable code for the baseline systems, and a leaderboard with a hidden test set can be found at https://withheld.for.review/.
