@@ -85,27 +85,7 @@ Discrete Reasoning Over Paragraphs}
 
 \section{Baseline Systems}
 \label{sec:baselines}
-
-In this section, we test the performance of several strong baselines on the
-\drop~ dataset.
-First, we try two prominent approaches to the QA task: evaluating
-the state-of-the-art in semantic parsing (\secref{semparse}) and reading comprehension (\secref{rc}) on our dataset.
-Then, in \secref{heuristics},
-we try to identify and exploit annotation artifacts (following \cite{Gururangan:2018,Kaushik2018HowMR})
-that are bound to exist in \drop, even after our adversarial crowdsourcing protocol.
-
-\subsection{Semantic Parsing}
-\label{sec:semparse}
-\input{semantic_parsing}
-
-\subsection{SQuAD-style Reading Comprehension}
-\label{sec:rc}
-\input{rc_baselines}
-
-\subsection{Heuristics and Adversarial Baselines}
-\label{sec:heuristics}
-\input{heuristics}
-
+\input{baselines}
 
 \section{Augmented QANet}
 \label{sec:model}

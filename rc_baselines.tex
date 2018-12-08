@@ -1,9 +1,12 @@
-\begin{itemize}
-    \item BiDAF
-    \item QANet 
-    \item QANet with ELMo
-    \item BERT
-    \item Passage-only and Question-Only QANet
-\end{itemize}
+The success of reading comprehension on many existing benchmarks proved its effectiveness in aligning question with passage and extracting concise answer spans. 
+% When constructing our dataset, we also allow a large portion of the answers (???\%) to be spans in the passage. However, we expect that such spans should not be extracted by simple lexical matching.
+% Although our dataset is designed to avoid simple lexical matching, a large portion of the answers (???\%) are allowed to be spans in the passage, which could possibly be answered by SQuAD-style reading comprehension models. 
+To test the real difficulty introduced by DROP that are different from existing benchmarks, we evaluate several representative SQuAD-style reading comprehension models on our dataset, including:
+(1) \textbf{BiDAF} \cite{Seo2016BidirectionalAF}, which is the adversarial baseline we used in data construction; 
+(2) \textbf{QANet} \cite{yu2018qanet}, which is currently the best-performing published model on SQuAD 1.1 without data augmentation or pre-training; 
+(3) \textbf{QANet + ELMo}, which enhances the QANet model by concatenating the pre-trained ELMo \cite{peters2018elmo} representations to the original embeddings; 
+(4) \textbf{BERT} \cite{Devlin2018BERTPO}, which recently achieved significant improvement on many NLP tasks by a novel way of pre-training, and we adopt their reading comprehension model for SQuAD. 
+These four systems achieved different levels of performance on SQuAD 1.1, with the EM scores on development set as XXX, XXX, XXX, XXX respecitvely.
+
 
 The implementation details and the performance on squad should be mentioned here.

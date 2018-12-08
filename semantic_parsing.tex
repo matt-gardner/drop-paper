@@ -13,41 +13,50 @@ into executable formal language. For tasks requiring answering questions in cont
 has been used to translate natural language utterances into representations that can be
 executed against some structured representation of the context, such as knowledge
 graphs~\citep[among others]{Zettlemoyer2005LearningTM,berant2013semantic,Yin2017ASN,chen2011learning}.
-This setup allows for complex reasoning over contextual knowledge, and it has
-been successfully used in several natural language understanding
-problems~\citep[among others]{}.
-This paradigm was shown to particularly lend itself to constrained question-answering
-over domain-specific datasets, such as geography (e.g., GeoQuery \cite{geoquery})
-@@, or more recently @@ \gabi{more examples}.
+This setup allows for chaining of discrete operators for reasoning over contextual knowledge.
+%and it has
+%been successfully used in several natural language understanding
+%problems~\citep[among others]{}.
+%This paradigm was shown to particularly lend itself to constrained question-answering
+%over domain-specific datasets, such as geography (e.g., GeoQuery \cite{geoquery})
+%@@, or more recently @@ \gabi{more examples}.
+
 Since many of \drop's questions require similar discrete reasoning, it is appealing
-to port some of the successful work in semantic parsing to the \drop dataset.
+to port some of the successful work in semantic parsing to the \drop~ dataset.
+To that end, we will use the grammar-constrained semantic parsing model
+built by~\cite{Krishnamurthy2017neuralsp} (KDG Parser henceforth). 
+Since semantic parsers assume the context is structured, a prerequisite for using the
+KDG parser, or any semantic parser for that matter,
+for \drop, is to represent paragraphs as structured contexts. We do so by running various structured prediction models
+on the paragraphs.
 
-\gabi{TODO: Pradeep, please take a look}
-To that end, we will use the WikiTables parser \cite{Krishnamurthy2017neuralsp},
-which populates a table from the input paragraph, and
-parses the question as a query into that table.
-The answer for the question is then deterministically computed given the predicted table
-and query.
-
-As \drop~ was constructed over paragraphs from various domains,
+\paragraph{Extracting predicate argument structures} As \drop~ was constructed over paragraphs from various domains,
 we experimented with several sentence representation formalisms which were
 developed with the goal of capturing meaning in open-domain text.
 Specifically, we will experiment with three prominent formalisms, each
-representing different level of semantic granularity:
-(1) syntactic dependencies \cite{sd}, which capture word-level relations,
-(2) Open Information Extraction (Open IE; \cite{oie}), a shallow
+representing a different level of semantic granularity:
+(1) syntactic dependencies \cite{Marneffe2008TheST}, which capture word-level relations,
+(2) Open Information Extraction \citep[Open IE]{Banko2007OpenIE}, a shallow
 form of semantic representation, which directly links predicates
 with their arguments, abstracting away certain syntactic variations, and
-(3) Semantic Role Labeling (SRL; \cite{srl}), which can be seen as an
+(3) Semantic Role Labeling \citep[SRL]{SRL}, which can be seen as an
 augmentation of Open IE with predicate sense disambiguation and finer, predicate-specific
-argument roles.
+argument roles. Since the KDG parser was built for
+the \textsc{WikiTableQuestions} dataset~\cite{Pasupat2015CompositionalSP},
+where the context is in a tabular format, 
+we transform the output of the structured prediction models into a table.
+We represent each predicate-argument structure as a row in a table, where the columns correspond
+to the argument types.
 
-Each of these representations can be used to populate a table for WikiTables,
-where lines correspond to predicate-argument structures,
-and columns correspond to different argument types.
+\paragraph{Augmenting predicate argument structures} To facilitate the production of numbers, dates, and
+other entities, we augment the predicate argument structures with the following additional information.
+We run a named entity tagger (TODO: cite Spacy's tagger?) on all sentences, and extract  
 See \figref{semantic-parsing} for an example of the different predicate-argument
 representations over an input sentence, and their corresponding tables.
 
+\paragraph{Logical form language}
+
+\paragraph{Training the parser}
 Finally, we use the method described in \cite{Krishnamurthy2017neuralsp}
 to train a solver to predict a logical form, and consequently an answer, from questions and tables.
 

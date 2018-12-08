@@ -4,9 +4,73 @@ TODO: sameer
 
 TODO: sameer
 
-\footnotetext{estimate!}
+- talk about the overall results, highlighting differences between each\footnotetext{estimate!}
+
+- compare sem parsing to QA numbers overall, and by answer type
+
+\begin{table}
+    \centering
+    \small
+    \begin{tabular}{crcc}
+        &&\multicolumn{2}{c}{\bf Semantic Parsing} \\
+        && { Correct} & { Incorrect} \\
+        \cline{3-4}
+    \multirow{2}{*}{\bf QA-Net}&{ Correct} & \multicolumn{1}{|c|}{-} & \multicolumn{1}{|c|}{-}\\
+        \cline{3-4}
+    &{ Incorrect} & \multicolumn{1}{|c|}{-} & \multicolumn{1}{|c|}{-}\\
+        \cline{3-4}
+    \end{tabular}
+    \caption{Comparing performance of SQuAD-style models with semantic parsing approaches, in terms of the instances they are accurate on.}
+    \label{tab:my_label}
+\end{table}
+
+\begin{table}
+    \centering
+    \small
+    \begin{tabular}{lcccc}
+    \toprule
+    \multirow{2}{*}{\bf Type} & \multicolumn{2}{c}{\bf QA-Net} & \multicolumn{2}{c}{\bf SemParsing} \\
+    & Correct & Incorrect & Correct &  Incorrect \\
+    \midrule
+    Numbers & &  & & \\
+    Date & &  & & \\
+    Spans: Single & &  & & \\
+    Spans: $>1$ & &  & & \\
+    \bottomrule
+    \end{tabular}
+    \caption{Distribution of errors in terms of the answers.}
+    \label{tab:my_label}
+\end{table}
+
 
 \paragraph{Error Analysis}
 
 TODO: sameer
+
+\begin{table*}[t]
+\centering
+\footnotesize
+\begin{tabular}{p{7cm}p{2.8cm}p{1.5cm}p{1.5cm}p{1.5cm}}
+\toprule
+{\bf Passage} & {\bf Question} & {\bf QA-Net} & {\bf SemParsing} & {\bf Gold}\\
+ \midrule
+ That year, his {\bf \color{teal} Untitled (1981)}, a painting of a haloed, black-headed man with a bright red skeletal body, depicted amid the artists signature scrawls, was {\bf \color{teal}{sold by Robert Lehrman for \$16.3 million, well above its  \$12 million high estimate}}.  & How many more dollars was the Untitled (1981) painting sold for than the 12 million dollar estimation? & 4300000 & \$16.3 million & shrug\\ 
+ \midrule
+ In {\bf \color{orange}1517, the seventeen-year-old King sailed to Castile}, where he was formally recognised as King of Castile. There, his Flemish court \ldots. {\bf \color{orange}In May 1518, Charles traveled to Barcelona in Aragon}, where he would remain for nearly two years. & Where did Charles travel to first, Castile or Barcelona? & Castile & Aragon & shrug\\
+ \midrule
+ In 1970, to commemorate the 100th anniversary of the founding of Baldwin City, {\bf \color{purple}Baker University professor and playwright Don Mueller and Phyllis E. Braun, Business Manager, produced a musical play entitled The Ballad Of Black Jack} to tell the story of the events that led up to the battle. & Who was the University professor that helped produce The Ballad Of Black Jack, Ivan Boyd or Don Mueller? & Don Mueller & Baker & shrug\\
+%  \midrule
+%  Count (XX\%) and Sort (XX\%) & Denver would retake the lead with kicker {\bf \color{brown}Matt Prater nailing a 43-yard field goal}, yet Carolina answered as kicker {\bf \color{brown}John Kasay ties the game with a 39-yard field goal}. \ldots \ Carolina closed out the half with {\bf \color{brown}Kasay nailing a 44-yard field goal}. \ldots \ In the fourth quarter, Carolina sealed the win with {\bf \color{brown}Kasay's 42-yard field goal}. & Which kicker kicked the most field goals? & John Kasay & Matt Prater\\
+%  \midrule
+%  Set of spans (XX\%) & Charleston is a popular tourist destination, {\bf \color{blue}with a considerable number of hotels, inns, and bed and breakfasts}, numerous restaurants featuring Lowcountry cuisine and shops. Charleston is also a notable art destination, named a top-25 arts destination by AmericanStyle magazine. & What type of accommodations are available in Charleston? &``hotels", ``inns", ``bed and breakfasts" & top-25 arts\\
+%  \midrule
+%  Composition (XX\%) & James Douglas was the second {\bf \color{olive}son of Sir George Douglas of Pittendreich, and Elizabeth Douglas, daughter of David Douglas} of Pittendreich. & Who was the grandfather of James Douglas? & David Douglas & Sir George Douglas\\
+%  \midrule
+%  Coreference Resolution (XX\%) & \ {\bf \color{violet}James Douglas} was the second son of Sir George Douglas of Pittendreich, and Elizabeth Douglas, daughter David Douglas of Pittendreich. Before {\bf \color{violet}1543 he married Elizabeth}, daughter of James Douglas, 3rd Earl of Morton. {\bf \color{violet}In 1553 James Douglas succeeded to the title and estates of his father-in-law}, including Dalkeith House in Midlothian, and Aberdour Castle in Fife. & How many years after he married Elizabeth did James Douglas succeed to the title and estates of his father-in-law? & 10 & 1553\\
+ \bottomrule
+\end{tabular}
+\caption{Examples of questions that both got right, and only one got right}
+\label{tab:error_examples}
+\end{table*}
+
 
