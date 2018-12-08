@@ -1,20 +1,17 @@
 \begin{itemize}
-    \item Question type distribution. 
-    We sample 200 questions from the training set and partition them into various categories shown in Table \tabref{main_examples}.\\
+    \item \textbf{Question type distribution}.
+        \subitem We sample 250 questions from the training and development set to manually annotate the set of relevant spans in the passage and also find the categories of discrete operations that would be performed on these spans to answer the question. \tabref{main_examples} shows the distribution of these categories in the dataset.
+    
+        \subitem To get a better sense of the question types on the entire dataset, we also curate most frequently occurring 200 bigram and trigram patterns and partition them into different categories based on domain knowledge. For example, the patterns with words ``longest", ``shortest"", and ``farthest" etc. would require sorting. This heuristic-based approximate question distribution is shown in \tabref{main_examples}. We also show a drill down on different lingusitic patterns
    
-%     We curate most frequently occurring top 200 bi-gram and tri-gram patterns and partition them into different categories based on domain knowledge. For example, the patterns with words ``longest", ``shortest"", and farthest etc. would require sorting.
-%   This heuristic-based approximate question distribution is shown in \figref{answer_distrib}
-    \item types of reasoning needed to answer questions \tabref{interesting_example}
-    \item distribution of answer types - span, number, digit
+   \item In order to discern the level of complexity needed to understand the passage, we perform a distance based analysis on the spans collected as part of our annotations described above. We found that on an average, we need to consider x number of spans to answer a question and the average distance between these spans is y tokens. \figref{span_highlight} shows an example of candidate spans.
+  
     \item What's \emph{not} in the data: common sense inference, except for lexical relationships (e.g., grandfather $==$ mother's father).  Some questions require knowledge of scoring in sports; there are enough examples of these that the model at least has a chance of learning this from the data.
 \end{itemize}
 
-% \begin{figure}
-%     \centering
-%     \includegraphics[width=0.5\textwidth]{images/answer_distrib}
-%     \caption{Distribution of categories of questions}
-%     \label{fig:answer_distrib}
-% \end{figure}
-% \gabi{Consider removing this figure 
-% and putting numbers in Table 1}
-% \sameer{Agreed!}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\textwidth]{images/highlight_sort.png}
+    \caption{Highlighted candidate spans}
+    \label{fig:span_highlight}
+\end{figure}
