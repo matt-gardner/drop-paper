@@ -8,6 +8,7 @@
 %%     \item hyperparameters (tree depth,...)
 %% \end{itemize}
 
+<<<<<<< HEAD
 Semantic parsing deals with translating a natural language utterance to
 an executable formal language, which is expressible enough to allow certain arithmetic
 operation (e.g., sorting or addition),  and
@@ -15,6 +16,18 @@ was shown to be particularly useful for constrained question-answering
 over narrow domains \cite{Zelle1996LearningTP,Zettlemoyer2005LearningTM,Berant2014ModelingBP}.
 Since many of \drop's questions require similar discrete reasoning, it is appealing
 to port some of the successful work in semantic parsing to the \drop dataset.
+=======
+Semantic parsing deals with translating natural language utterances to
+into executable formal language. For tasks requiring answering questions in context, semantic parsing
+has been used to translate natural language utterances into representations that can be
+executed against some structured representation of the context, such as 
+This setup allows for complex reasoning over contextual knowledge, and it has
+been successfully used in several natural language understanding
+problems~\citep[among others]{berant2013semantic,Yin2017ASN,chen2011learning}.
+This paradigm was shown to particularly lend itself to constrained question-answering
+over domain-specific datasets, such as geography (e.g., GeoQuery \cite{geoquery})
+@@, or more recently @@ \gabi{more examples}.
+>>>>>>> 91158486243399ae635f840405da4e39cfc6bfc6
 
 \gabi{TODO: Pradeep, please take a look}
 To that end, we will use the WikiTables parser \cite{Krishnamurthy2017neuralsp},
