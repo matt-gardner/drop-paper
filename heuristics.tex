@@ -1,14 +1,35 @@
-TODO- GABI
+%% TODO- GABI
 
-\begin{itemize}
-\item
-  Look at the dev part, and come up with QA templates
-  *which can be automatically detected*.
-\item
-  Assess their frequency on the dev set. How much of it do the chosen templates cover.
-  (maybe this can be a part of the analysis section?)
-\item
-  Come up with heuristics for each QA template, probably based on frequencies in
-  the dev set.
-  How well do they do?
-\end{itemize}
+%% \begin{itemize}
+%% \item
+%%   Look at the dev part, and come up with QA templates
+%%   *which can be automatically detected*.
+%% \item
+%%   Assess their frequency on the dev set. How much of it do the chosen templates cover.
+%%   (maybe this can be a part of the analysis section?)
+%% \item
+%%   Come up with heuristics for each QA template, probably based on frequencies in
+%%   the dev set.
+%%   How well do they do?
+%% \end{itemize}
+
+A recent line of work has identified that popular synthetic NLP datasets
+(such as SQuAD, SNLI) are prone to have artifacts and annotation biases which may be exploited by (advertently or inadvertently) by machine learning algorithms that
+learn to pick up these artifacts as signal,
+rather than actually learning something semantically meaningful (for example, by
+only looking at the question or the hypothesis in QA and entailment dataset, respectively).
+Consequently, the resulting models were shown to be brittle and extremely sensitive
+to minor data pertubations \cite{max,others}.
+
+While \drop~ was annotated with an adversarial setting
+(see \secref{sec:data_collection}) in an attempt to mitigate these effects, some
+artifacts may still exist in the annotated data.
+In an attempt to estimate their extent, in the following we take an adversersial
+stance and try to ``break'' \drop in various ways which were found to be successful
+on previous datasets.
+
+\paragraph{Question-only baseline}
+
+\paragraph{Paragraph-only baseline}
+
+\paragraph{Majority baseline}
