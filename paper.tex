@@ -35,6 +35,7 @@
 \newcommand{\dheeru}[1]{\todo[color=olive!40]{\textbf{dheeru:} #1}}
 \newcommand{\matt}[1]{\todo[color=teal!40]{\textbf{Matt:} #1}}
 \newcommand{\nascomment}[1]{\todo[color=blue!40]{\textbf{Noah:} #1}}
+\newcommand{\pdcomment}[1]{\todo[color=red!40]{\textbf{Pradeep:} #1}}
 
 \newcommand{\figref}[1]{Figure~\ref{fig:#1}}
 \newcommand{\secref}[1]{Section~\ref{sec:#1}}
@@ -109,7 +110,7 @@ Discrete Reasoning Over Paragraphs}
     \addlinespace
          
     %%%%%%%        SQuAD-style     %%%%%%%%%%%%
-    \multicolumn{5}{l}{\bf SQuAD style}\\
+    \multicolumn{5}{l}{\bf SQuAD-style RC}\\
     BiDAF       &   24.87   &   28.91   &   -   &   -   \\
     QANet       &   26.28   &   30.30   &   23.66   &   27.39   \\
     QANet+ELMo  &   26.55   &   30.46   &   -   &   -   \\
@@ -119,9 +120,9 @@ Discrete Reasoning Over Paragraphs}
 
     %%%%%%%        Baselines     %%%%%%%%%%%%
     \multicolumn{5}{l}{\bf Heuristics/Adversarial Baselines}\\
-    Majority   &   -   &   -   &   -   &   -   \\
-    Q-only     &   9.1   &   11.2   &   -   &   -   \\
-    P-only     &   5.4   &   7.1   &   -   &   -   \\
+    Majority   &   0.00   &   1.02   &   -   &   -   \\
+    Q-only     &   9.20   &   11.23   &   -   &   -   \\
+    P-only     &   5.41   &   7.08   &   -   &   -   \\
     \addlinespace
     
     %%%%%%%        Baselines     %%%%%%%%%%%%
@@ -129,7 +130,7 @@ Discrete Reasoning Over Paragraphs}
     + Q Span   &   26.02   &   30.25   &   -   &   -   \\
     + Count     &   29.55   &   33.74   &   -   &   -   \\
     + Add/Sub     &   39.85   &   43.85   &   -   &   -   \\
-    Complete Model      &   43.80   &   48.20   &   -   &   -   \\
+    Complete Model      &   43.80   &   48.20   &   42.35   &   46.24   \\
     \addlinespace
 
     %%%%%%%        Human     %%%%%%%%%%%%
@@ -141,6 +142,7 @@ Discrete Reasoning Over Paragraphs}
     \label{tab:my_label}
 \end{table}
 
+\gabi{Split F1 to P/R?}
 
 \section{Results and Discussion}
 \label{sec:results}
@@ -149,7 +151,7 @@ Discrete Reasoning Over Paragraphs}
 \section{Conclusion}
 
 TODO
-\gabi{Consider as appendix: sample of the dataset (maybe using the dashboard?), screenshot of the annotation interface}
+\gabi{Consider putting in an appendix: sample of the dataset (maybe using the dashboard?), screenshot of the annotation interface, full list hyperparams for all models}
 
 
 %\section*{Acknowledgments}

@@ -8,64 +8,77 @@
 %%     \item hyperparameters (tree depth,...)
 %% \end{itemize}
 
-Semantic parsing deals with translating natural language utterances to
-into executable formal language. For tasks requiring answering questions in context, semantic parsing
-has been used to translate natural language utterances into representations that can be
-executed against some structured representation of the context, such as knowledge
-graphs~\citep[among others]{Zettlemoyer2005LearningTM,berant2013semantic,Yin2017ASN,chen2011learning}.
-This setup allows for chaining of discrete operators for reasoning over contextual knowledge.
+% Semantic parsing deals with translating natural language utterances into executable formal language. 
+%For tasks requiring answering questions in context, 
+Semantic parsing
+has been used to translate natural language utterances into formal executable language (e.g., SQL), prescribing discrete operations (retrieval, addition, etc.)
+against a structured knowledge representation, such as knowledge graphs or tabular databases ~\citep[inter alia]{Zettlemoyer2005LearningTM,berant2013semantic,Yin2017ASN,chen2011learning}.
+% This setup allows for chaining of discrete operators for reasoning over contextual knowledge.
 %and it has
 %been successfully used in several natural language understanding
 %problems~\citep[among others]{}.
 %This paradigm was shown to particularly lend itself to constrained question-answering
 %over domain-specific datasets, such as geography (e.g., GeoQuery \cite{geoquery})
 %@@, or more recently @@ \gabi{more examples}.
-
 Since many of \drop's questions require similar discrete reasoning, it is appealing
 to port some of the successful work in semantic parsing to the \drop~ dataset.
-To that end, we will use the grammar-constrained semantic parsing model
-built by~\cite{Krishnamurthy2017neuralsp} (KDG Parser henceforth). 
-Since semantic parsers assume the context is structured, a prerequisite for using the
-KDG parser, or any semantic parser for that matter,
-for \drop, is to represent paragraphs as structured contexts. We do so by running various structured prediction models
-on the paragraphs.
+Specifically, we will use the grammar-constrained semantic parsing model
+built by~\citet{Krishnamurthy2017neuralsp} (KDG) for the \textsc{WikiTableQuestions} tabular dataset~\citep{Pasupat2015CompositionalSP}. 
+% Since semantic parsers assume the context is structured, a prerequisite for using the
+% KDG parser, or any semantic parser for that matter,
 
-\paragraph{Extracting predicate argument structures} As \drop~ was constructed over paragraphs from various domains,
-we experimented with several sentence representation formalisms which were
-developed with the goal of capturing meaning in open-domain text.
-Specifically, we will experiment with three prominent formalisms, each
-representing a different level of semantic granularity:
-(1) syntactic dependencies \cite{Marneffe2008TheST}, which capture word-level relations,
-(2) Open Information Extraction \citep[Open IE]{Banko2007OpenIE}, a shallow
-form of semantic representation, which directly links predicates
-with their arguments, abstracting away certain syntactic variations, and
-(3) Semantic Role Labeling \citep[SRL]{SRL}, which can be seen as an
-augmentation of Open IE with predicate sense disambiguation and finer, predicate-specific
-argument roles. Since the KDG parser was built for
-the \textsc{WikiTableQuestions} dataset~\cite{Pasupat2015CompositionalSP},
-where the context is in a tabular format, 
-we transform the output of the structured prediction models into a table.
-We represent each predicate-argument structure as a row in a table, where the columns correspond
-to the argument types.
 
-\paragraph{Augmenting predicate argument structures} To facilitate the production of numbers, dates, and
-other entities, we augment the predicate argument structures with the following additional information.
-We run a named entity tagger (TODO: cite Spacy's tagger?) on all sentences, and extract  
-See \figref{semantic-parsing} for an example of the different predicate-argument
-representations over an input sentence, and their corresponding tables.
+\paragraph{Sentence representation schemes:}
+% As \drop~ was constructed over paragraphs from various domains
+We experimented with three paradigms to represent paragraphs as structured contexts:
+% Specifically, we will experiment with three prominent formalisms, each
+% representing a different level of semantic granularity\pdcomment{Don't you want to cite the actual systems used?}:
+(1) Stanford dependencies \cite{Marneffe2008TheST}, which capture word-level syntactic relations,
+(2) Open Information Extraction \citep[Open IE]{Banko2007OpenIE}, a
+shallow semantic representation which directly links predicates
+and arguments, 
+% abstracting away certain syntactic variations, 
+and
+(3) Semantic Role Labeling \citep[SRL]{SRL}, which disambiguates predicate and uses predicate-specific
+argument roles. 
+To adhere to KDG's structured representation format,
+we convert each of these representations into a table, where lines are predicate-argument structures and columns correspond to different argument roles.
+
+% Since the KDG parser was built for
+% the \textsc{WikiTableQuestions} dataset~\citep{Pasupat2015CompositionalSP},
+% where the context is in a tabular format, 
+% we transform the output of the structured prediction models into a table.
+% We represent each predicate-argument structure as a row in a table, where the columns correspond
+% to the argument types.
+
+% \paragraph{Augmenting predicate argument structures} To facilitate the parser's production of numbers, dates, and
+% other entities, we augment the predicate argument structures with the following information.
+% We run the named entity tagger \pdcomment{from Spacy~\citep{spacy2}} on all sentences, and for each argument in the extracted
+% predicate argument structures, make a list of entities that occurs in that argument. We identify three categories of entities:
+% numbers, dates, and other kinds of entities, and keep track of them separately. The language we describe below
+% contains functions that can operate on arguments to access these entities. Additionally, we also run a neural coreference resolution system \pdcomment{mention the coref system and AllenNLP in experimental setup} to resolve anaphora, and add the resolved entities to the entity lists of the corresponding arguments.
+% See \figref{semantic-parsing} for an example of the different predicate-argument representations over an input sentence, and their corresponding tables.
 
 \paragraph{Logical form language}
+Our logical form language identifies five basic elements in the table representation: \textit{predicate-argument structures} (i.e., table rows), \textit{relations} (column-headers), \textit{strings}, \textit{numbers}, and \textit{dates}. 
+In addition, it defines functions that operate on these elements,
+such as counters and \emph{filters}.\footnote{For example \texttt{filter\_number\_greater} takes a set of predicate-argument structures, the name of a relation, and a number and returns all those structures where the numbers in the argument specified by the relation are greater than the given number.} 
+% or \emph{counters}, which count a set of predicate argument structures or arguments
+% Broadly, the functions are of four types: (1) functions that \emph{filter} predicate argument structures\footnote{For example \texttt{filter\_number\_greater} takes a set of predicate-argument structures, the name of a relation, and a number and returns all those structures where the numbers in the argument specified by the relation are greater than the given number}; (2) functions that \emph{return} whole arguments, or numbers, dates or other entities within them given a set of predicate-argument structures and a relation; (3) functions that \emph{count} a set of predicate argument structures or arguments; and (4) \emph{numerical} functions that compute minimum or maximum values of dates or numbers, and sums, averages and differences of numbers. 
+Following~\citet{Krishnamurthy2017neuralsp}, we use the argument and return types of these functions to automatically induce a grammar to constrain the parser. We define the grammar starting types to be date, number, and string, so that all produced logical forms are guaranteed to evaluate to one of these types. Finally, we add context-specific rules to produce strings occuring in both question and paragraph. 
+The complete set of functions used in our language and their induced grammar are included in the Appendix. 
+% See~\figref{semantic-parsing} for an example of a logical form in our language.
 
-\paragraph{Training the parser}
-Finally, we use the method described in \cite{Krishnamurthy2017neuralsp}
-to train a solver to predict a logical form, and consequently an answer, from questions and tables.
+\paragraph{Training and inference}
+% The KDG parser is an encoder-decoder model with a Maximum Marginal Likelihood (MML) objective. 
+During training, the KDG parser maximizes the likelihood of a set of approximate question logical forms that evaluate to the correct answer. We obtain such a set by performing an exhaustive search, driven by the grammar and the KDG parser, up to a preset tree depth. At test time, we use beam search to produce the most likely logical form, which is then executed to predict an answer.
 
-\begin{table}[]
-\begin{tabular}{@{}lllll@{}}
-\toprule
-Representation         & \#Rels & P & R & F1 \\ \midrule
-Syntactic dependencies &             &           &        &    \\
-Open IE                &             &           &        &    \\
-Semantic Role Labeling  &             &           &        &    \\ \bottomrule
-\end{tabular}
-\end{table}
+% \begin{table}[]
+% \begin{tabular}{@{}lllll@{}}
+% \toprule
+% Representation         & \#Rels & P & R & F1 \\ \midrule
+% Syntactic dependencies &             &           &        &    \\
+% Open IE                &             &           &        &    \\
+% Semantic Role Labeling  &             &           &        &    \\ \bottomrule
+% \end{tabular}
+% \end{table}

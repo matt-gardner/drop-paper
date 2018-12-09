@@ -1,4 +1,10 @@
+
 TODO: sameer
+
+\paragraph{Experimental Setting}
+For the semantic parsing baselines, we use the implementations 
+provided by the AllenNLP \cite{Gardner2017AllenNLP} framework of models for syntactic dependencies \cite{Dozat2017StanfordsGN}, Open IE \cite{Stanovsky2018SupervisedOI} and SRL \cite{He2017DeepSR}.
+
 
 \paragraph{Empirical Analysis}
 
@@ -8,6 +14,14 @@ TODO: sameer
 
 - compare sem parsing to QA numbers overall, and by answer type
 
+- For heuristics, mention that it's easy to automatically identify
+that 15\% of the data are either-or questions (e.g., ``Which occured first, the Battle of Las Navas de Tolosa or king Fernando III gave a new fuero to the city?''), with good precision. 
+For these questions, which present two options, and for which the answer span is in the question, the question-only baseline does
+em: 56.13,  f1: 64.24, slightly biased towards the first option presented in the question.
+
+- For semantic parsing, mention that we were only able to search 
+the logical forms of up to depth 9 (finding a plausible logical form for less than 20\% of the questions in the training set), due to the exponential dependency on the tree depth, indicating that more research is needed to address the scalability of these models to large-scale reading comprehension datasets. Another reason for the relatively poor performance is the pipeline of pretrained models to first extract structures and then look for logical forms, inevitably causing a cascade of errors.
+
 \begin{table}
     \centering
     \small
@@ -15,30 +29,31 @@ TODO: sameer
         &&\multicolumn{2}{c}{\bf Semantic Parsing} \\
         && { Correct} & { Incorrect} \\
         \cline{3-4}
-    \multirow{2}{*}{\bf QA-Net}&{ Correct} & \multicolumn{1}{|c|}{-} & \multicolumn{1}{|c|}{-}\\
+    \multirow{2}{*}{\bf QA-Net}&{ Correct} & \multicolumn{1}{|c|}{40} & \multicolumn{1}{|c|}{1407}\\
         \cline{3-4}
-    &{ Incorrect} & \multicolumn{1}{|c|}{-} & \multicolumn{1}{|c|}{-}\\
+    &{ Incorrect} & \multicolumn{1}{|c|}{27} & \multicolumn{1}{|c|}{3742}\\
         \cline{3-4}
     \end{tabular}
     \caption{Comparing performance of SQuAD-style models with semantic parsing approaches, in terms of the instances they are accurate on.}
+    % Obtained by running: python3 analyze_results.py --gold_path drop_dataset_dev.gold.json --prediction_paths model_predictions/bert_large_dev.json,model_predictions/semparse_srl_dev.json --names qa,sp --save_dir analysis_results
     \label{tab:my_label}
 \end{table}
 
 \begin{table}
     \centering
     \small
-    \begin{tabular}{lcccc}
+    \begin{tabular}{lccccc}
     \toprule
-    \multirow{2}{*}{\bf Type} & \multicolumn{2}{c}{\bf QA-Net} & \multicolumn{2}{c}{\bf SemParsing} \\
-    & Correct & Incorrect & Correct &  Incorrect \\
+    \multirow{2}{*}{\bf Type} & \multirow{2}{*}{$(\%)$} &\multicolumn{2}{c}{\bf Exact Match} & \multicolumn{2}{c}{\bf F1} \\
+    & & QA & SP & QA &  SP \\
     \midrule
-    Numbers & &  & & \\
-    Date & &  & & \\
-    Spans: Single & &  & & \\
-    Spans: $>1$ & &  & & \\
+    Date        & 3.2  & 5.4   & 0.0 & 27.3  & 10.4\\
+    Numbers     & 58.7 & 18.5  & 0.0 & 18.8  & 0.0 \\
+    Single Span & 36.6 & 60.5  & 5.1 & 70.3  & 8.7 \\
+    $>1$ Spans  & 1.5  & 0     & 0.0 & 42.5  & 8.1 \\
     \bottomrule
     \end{tabular}
-    \caption{Distribution of errors in terms of the answers.}
+    \caption{Performance in terms of the answer types.}
     \label{tab:my_label}
 \end{table}
 
@@ -54,19 +69,45 @@ TODO: sameer
 \toprule
 {\bf Passage} & {\bf Question} & {\bf QA-Net} & {\bf SemParsing} & {\bf Gold}\\
  \midrule
- That year, his {\bf \color{teal} Untitled (1981)}, a painting of a haloed, black-headed man with a bright red skeletal body, depicted amid the artists signature scrawls, was {\bf \color{teal}{sold by Robert Lehrman for \$16.3 million, well above its  \$12 million high estimate}}.  & How many more dollars was the Untitled (1981) painting sold for than the 12 million dollar estimation? & 4300000 & \$16.3 million & shrug\\ 
+... the game started off well for the Jets as Geno Smith ran in the end zone for a TD, and ... Eventually, Geno Smith stepped up under pressure and delivered a game-winning, 69-yard TD to Santonio Holmes. As a ...  
+%  In a matchup of fellow rookie quarterbacks Geno Smith and E.J. Manuel, the game started off well for the Jets as Geno Smith ran in the end zone for a TD, and accounted for another on a long strike to Stephen Hill. The defense was stingy, holding off E.J. Manuel and the Bills offense throughout the game leading into the third quarter, and Nick Folk delivered two successful field goals to create a 20-6 cushion at the beginning of the 3rd quarter. However, it was to be acknowledged that the Jets committed a team-record 20 penalties for 168 yards, which helped the Bills get back into the game by the 4th quarter. Eventually, Geno Smith stepped up under pressure and delivered a game-winning, 69-yard TD to Santonio Holmes. As a result, the Jets proved that they can win in the face of adversity. Bilal Powell had a good day, rushing 27 times for 149 rushing yards.  
+ & Which player scored the first touchdown of the game? 
+ & Santonio Holmes & Geno Smith & Geno Smith\\ 
  \midrule
- In {\bf \color{orange}1517, the seventeen-year-old King sailed to Castile}, where he was formally recognised as King of Castile. There, his Flemish court \ldots. {\bf \color{orange}In May 1518, Charles traveled to Barcelona in Aragon}, where he would remain for nearly two years. & Where did Charles travel to first, Castile or Barcelona? & Castile & Aragon & shrug\\
+Old age pensions were raised by 300 francs per month to 1,700 francs for a single person and to 3,700 francs for a couple, while health insurance benefits ...
+%  Old age pensions were raised by 300 francs per month to 1,700 francs for a single person and to 3,700 francs for a couple, while health insurance benefits were made more widely available to unemployed persons and part-time employees. Housing allocations for the low-paid were raised by 25% in 1981, and in the two years following May 1981 family allowances were increased by 44% for families with 3 children and by 81% for families with 2 children. In 1981, the purchasing power of social transfers went up by 4.5% and by 7.6% in 1982. In addition, the minimum wage (which affected 1.7 million employees) was increased by 15% in real terms between May 1981 and December 1982.
+ & Who received more francs, a single person or a couple? 
+ & single person & couple & couple\\
  \midrule
- In 1970, to commemorate the 100th anniversary of the founding of Baldwin City, {\bf \color{purple}Baker University professor and playwright Don Mueller and Phyllis E. Braun, Business Manager, produced a musical play entitled The Ballad Of Black Jack} to tell the story of the events that led up to the battle. & Who was the University professor that helped produce The Ballad Of Black Jack, Ivan Boyd or Don Mueller? & Don Mueller & Baker & shrug\\
+... After a scoreless first quarter, the Lions' Mikel Leshoure ran in three consecutive touchdowns, from 7, 1, and 8 yards out respectively to take a 21-point lead going into halftime. Leshoure became the first ...
+%In week 9, the Lions flew south to play the Jacksonville Jaguars. After a scoreless first quarter, the Lions' Mikel Leshoure ran in three consecutive touchdowns, from 7, 1, and 8 yards out respectively to take a 21-point lead going into halftime. Leshoure became the first Lions rusher to score three touchdowns in the first half. After a scoreless third quarter, Detroit's Jason Hanson kicked a 42-yard field goal. The Jaguars finally got on the board when Micheal Spurlock caught a 5-yard touchdown pass from Blaine Gabbert; they then completed a two-point conversion when Blaine Gabbert completed a pass to Rashad Jennings. The Lions responded with a 10-yard touchdown run from Joique Bell. Jacksonville scored the final points of the game with a 6-yard touchdown catch from Blaine Gabbert to Justin Blackmon; they again went for a two-point conversion, but were unsuccessful this time. It was the Lions' most lopsided win of the season and would also be their final victory of the 2012 season.
+ & Which team scored more points in the first half?
+ & Jaguars & Lions & Lions \\
+ \midrule
+... throne was contested by Stephen B\'athory and the Holy Roman Emperor Maximillian II. ... Emperor Maximillian was chosen as monarch ... Maximilian's II death in fall of 1576 ... recognition of Bathory as the king.
+%  The rebellion of the city of Danzig  was a revolt from December 1575 to December 1577 of the city against the outcome of the Polish-Lithuanian royal election, 1576. The Polish throne was contested by Stephen B\u00e1thory and the Holy Roman Emperor Maximillian II. It began on 12 December 1575 when Emperor Maximillian was chosen as monarch by the Polish Senate, while the majority of the szlachta  had voted for Bathory. It ended on 16 December 1577. Maximilian's II death in fall of 1576 weakened Danzig's position and made the conflict less about the recognition of the ruler than about Danzig's privileges. With neither side being able to defeat the other militarily, a compromise was reached, with economic as well as religious privileges of the city being restored and recognized, in return for a large reparation and recognition of Bathory as the king.
+ & Who ultimately was crowned king? 
+ & Stephen B\'{a}thory & Bathory / Stephen B\'{a}thory & Bathory\\
+ \midrule
+... After a scoreless third quarter, Tennessee took the lead as kicker Rob Bironas got a 45-yard field goal, while Pittsburgh kicker Jeff Reed made a 32-yard field goal  ...
+% The Titans began their season at Heinz Field for the annual kickoff game against the defending Super Bowl champions, the Pittsburgh Steelers.  After a scoreless first quarter, Tennessee trailed near the end of the second quarter as Steelers quarterback Ben Roethlisberger completed a 34-yard touchdown pass to wide receiver Santonio Holmes.  Afterwards, the Titans would tie the game as quarterback Kerry Collins completed a 16-yard touchdown pass to wide receiver Justin Gage. After a scoreless third quarter, Tennessee took the lead as kicker Rob Bironas got a 45-yard field goal, while Pittsburgh kicker Jeff Reed made a 32-yard field goal to tie the game.  In overtime, the Steelers got the win as Reed nailed a game-winning 33-yard field goal. With the loss, the Titans started the season out at 0-1.
+ & Which team kicked a longer field goal in the fourth quarter?
+ & Titans & Titans & Titans \\
+ \midrule
+... King Amangkurat I died during the retreat of the royal court. His son and successor, Amangkurat II, requested...
+% Trunajaya rebellion  or Trunajaya War was the ultimately unsuccessful rebellion waged by the Madurese prince Trunajaya and fighters from Makassar against the Mataram Sultanate and its Dutch East India Company  supporters in Java  during the 1670s. The rebellion was initially successful: the rebels defeated the royal army at Gegodog , captured most of the Javanese north coast, and took the Mataram capital Plered . King Amangkurat I died during the retreat of the royal court. His son and successor, Amangkurat II, requested help from the VOC in exchange for financial remuneration and geopolitical concessions. The VOC's subsequent involvement turned the tide of the war. VOC and Mataram forces recovered lost territories and overran Trunajaya's new capital at Kediri . However, the rebellion continued until the capture of Trunajaya at the end of 1679, and the defeat, death, or surrender of the other rebel leaders . Trunajaya was killed by Amangkurat\u00a0II personally in 1680 while a prisoner of the VOC. After his father's death in 1677, Amangkurat\u00a0II also faced rival claims to the throne. The most serious rival was his brother Pangeran Puger, who took the capital Plered in 1677 and did not surrender until 1681.
+ & Who was Amangkurat II's father?
+ & King Amangkurat I & ``'' & King Amangkurat I \\
+ \midrule
+The Siege of Vienna in 1529 was the first attempt ... Thereafter, 150 years of bitter military tension and reciprocal attacks ensued, culminating in the Battle of Vienna of 1683, which marked the start ...
+% The Siege of Vienna in 1529 was the first attempt by the Ottoman Empire, led by Suleiman the Magnificent, to capture the city of Vienna, Austria. The siege signalled the pinnacle of the Ottoman Empire's power and the maximum extent of Ottoman expansion in central Europe. Thereafter, 150 years of bitter military tension and reciprocal attacks ensued, culminating in the Battle of Vienna of 1683, which marked the start of the 15-year-long Great Turkish War. The inability of the Ottomans to capture Vienna in 1529 turned the tide against almost a century of conquest throughout eastern and central Europe. The Ottoman Empire had previously annexed Central Hungary and established a vassal state in Transylvania in the wake of the Battle of Moh\u00e1cs. According to Arnold J. Toynbee, \"The failure of the first  brought to a standstill the tide of Ottoman conquest which had been flooding up the Danube Valley for a century past.\" There is speculation by some historians that Suleiman's main objective in 1529 was actually to assert Ottoman control over the whole of Hungary, the western part of which  was under Habsburg control. The decision to attack Vienna after such a long interval in Suleiman's European campaign is viewed as an opportunistic manoeuvre after his decisive victory in Hungary. Other scholars theorise that the suppression of Hungary simply marked the prologue to a later, premeditated invasion of Europe.
+ & What happened first, the Siege of Vienna or the Battle of Vienna?
+ & The Siege of Vienna & the Battle of Vienna & The Siege of Vienna \\
+ %  In {\bf \color{orange}1517, the seventeen-year-old King sailed to Castile}, where he was formally recognised as King of Castile. There, his Flemish court \ldots. {\bf \color{orange}In May 1518, Charles traveled to Barcelona in Aragon}, where he would remain for nearly two years. & Where did Charles travel to first, Castile or Barcelona? & Castile & Aragon & shrug\\
 %  \midrule
-%  Count (XX\%) and Sort (XX\%) & Denver would retake the lead with kicker {\bf \color{brown}Matt Prater nailing a 43-yard field goal}, yet Carolina answered as kicker {\bf \color{brown}John Kasay ties the game with a 39-yard field goal}. \ldots \ Carolina closed out the half with {\bf \color{brown}Kasay nailing a 44-yard field goal}. \ldots \ In the fourth quarter, Carolina sealed the win with {\bf \color{brown}Kasay's 42-yard field goal}. & Which kicker kicked the most field goals? & John Kasay & Matt Prater\\
-%  \midrule
-%  Set of spans (XX\%) & Charleston is a popular tourist destination, {\bf \color{blue}with a considerable number of hotels, inns, and bed and breakfasts}, numerous restaurants featuring Lowcountry cuisine and shops. Charleston is also a notable art destination, named a top-25 arts destination by AmericanStyle magazine. & What type of accommodations are available in Charleston? &``hotels", ``inns", ``bed and breakfasts" & top-25 arts\\
-%  \midrule
-%  Composition (XX\%) & James Douglas was the second {\bf \color{olive}son of Sir George Douglas of Pittendreich, and Elizabeth Douglas, daughter of David Douglas} of Pittendreich. & Who was the grandfather of James Douglas? & David Douglas & Sir George Douglas\\
-%  \midrule
-%  Coreference Resolution (XX\%) & \ {\bf \color{violet}James Douglas} was the second son of Sir George Douglas of Pittendreich, and Elizabeth Douglas, daughter David Douglas of Pittendreich. Before {\bf \color{violet}1543 he married Elizabeth}, daughter of James Douglas, 3rd Earl of Morton. {\bf \color{violet}In 1553 James Douglas succeeded to the title and estates of his father-in-law}, including Dalkeith House in Midlothian, and Aberdour Castle in Fife. & How many years after he married Elizabeth did James Douglas succeed to the title and estates of his father-in-law? & 10 & 1553\\
+%  In 1970, to commemorate the 100th anniversary of the founding of Baldwin City, {\bf \color{purple}Baker University professor and playwright Don Mueller and Phyllis E. Braun, Business Manager, produced a musical play entitled The Ballad Of Black Jack} to tell the story of the events that led up to the battle. & Who was the University professor that helped produce The Ballad Of Black Jack, Ivan Boyd or Don Mueller? & Don Mueller & Baker & shrug\\
+
+
  \bottomrule
 \end{tabular}
 \caption{Examples of questions that both got right, and only one got right}
